@@ -44,7 +44,8 @@ do
                 --no_distillation \
                 --learning_rate $LR \
                 --pet_per_gpu_train_batch_size $BS \
-                --seed $SEED
+                --seed $SEED \
+                | tee ./$OUT_DIR/train.log
         done
     done
 done
