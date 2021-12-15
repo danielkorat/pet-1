@@ -28,6 +28,10 @@ import log
 from pet.utils import InputExample, exact_match, save_logits, save_predictions, softmax, LogitsList, set_seed, eq_div
 from pet.wrapper import TransformerModelWrapper, SEQUENCE_CLASSIFIER_WRAPPER, WrapperConfig
 
+from time import perf_counter_ns
+
+SEC_TO_NS_SCALE = 1000000000
+
 logger = log.get_logger('root')
 
 
@@ -342,6 +346,8 @@ def train_pet_ensemble(model_config: WrapperConfig, train_config: TrainConfig, e
 
             # Training
             if do_train:
+                start = perf_counter_ns()
+
                 if ipet_data_dir:
                     p = os.path.join(ipet_data_dir, 'p{}-i{}-train.bin'.format(pattern_id, iteration))
                     ipet_train_data = InputExample.load_examples(p)
@@ -371,6 +377,11 @@ def train_pet_ensemble(model_config: WrapperConfig, train_config: TrainConfig, e
                     wrapper.model = None
                     wrapper = None
                     torch.cuda.empty_cache()
+
+                elapsed = f"{((perf_counter_ns() - start) / SEC_TO_NS_SCALE):.3f}"
+                print(f"\n\nTraining Elapsed Time: {elapsed}s\n\n")
+                with open(os.path.join(output_dir, f'{elapsed}s'), 'w') as f:
+                    f.write(elapsed)
 
             # Evaluation
             if do_eval:
