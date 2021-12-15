@@ -12,9 +12,9 @@ fi
 
 export OUT_DIR="output_$(date +"%m.%d.%H.%M")"
 
-export SEED_LIST=(5) # (5 12 42)
-export NUM_TRAIN_LIST=(32) # (32 64 100 200 500 1000)
-export STEPS_LIST=(1) # (100 200)
+export SEED_LIST=(5 12 42)
+export NUM_TRAIN_LIST=(32 64 100 200 500 1000)
+export STEPS_LIST=(100 200)
 export SEQ_LEN=128
 export MODEL=bert-base-uncased
 export LR=1e-05
