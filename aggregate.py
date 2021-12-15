@@ -42,22 +42,21 @@ def main(out_dir: str) -> None:
                 time_avg[int(num_ex)][int(step)] = f"{(time / num_of_seeds):.4f}"
 
         space = ' ' * 10
-        print(f"\n\nPattern {pattern_id} - Average Accuracy\n")
-        for i, num_ex in enumerate(sorted(avg.keys())):
-            steps_list = sorted(avg[num_ex].keys())
-            if i == 0:
-                print(f'#ex\steps{space}' + f'{space}'.join(map(str, steps_list)))
 
-            print(f"   {num_ex}{space}" + f'{space}'.join([avg[num_ex][steps] for steps in steps_list]))
+        def print_write(str, f):
+            print(str)
+            print(str, file=f)
 
-        print(f"\n\nPattern {pattern_id} - Average Elapsed Time for Training (secs)\n")
-        for i, num_ex in enumerate(sorted(time_avg.keys())):
-            steps_list = sorted(time_avg[num_ex].keys())
-            if i == 0:
-                print(f'#ex\steps{space}' + f'{space}'.join(map(str, steps_list)))
+        with open(Path(out_dir) / "final_result.txt", 'w') as f:
+            for scores_dict, desc in zip((avg, time_avg),("Average Accuracy", "Average Elapsed Time for Training (secs)")): 
+                    print_write(f"\n\nPattern {pattern_id} - {desc}\n", f)
+                    
+                    for i, num_ex in enumerate(sorted(scores_dict.keys())):
+                        steps_list = sorted(scores_dict[num_ex].keys())
+                        if i == 0:
+                            print_write(f'#ex\steps{space}' + f'{space}'.join(map(str, steps_list)), f)
 
-            print(f"   {num_ex}{space}" + f'{space}'.join([time_avg[num_ex][steps] for steps in steps_list]))
-        print('\n\n')
+                        print_write(f"   {num_ex}{space}" + f'{space}'.join([scores_dict[num_ex][steps] for steps in steps_list]), f)
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ export MODEL=bert-base-uncased
 export LR=1e-05
 export BS=4
 
+
 for NUM_TRAIN in "${NUM_TRAIN_LIST[@]}"
 do
     for SEED in "${SEED_LIST[@]}"
